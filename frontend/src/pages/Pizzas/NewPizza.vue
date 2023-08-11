@@ -11,18 +11,18 @@
 
         <hr>
 
-        <BaseInput label="Name" class="w-64" />
+        <BaseInput label="Name" :value="name" class="w-64" @input="name = $event.target.value" />
 
         <div class="space-y-2">
             <p class="text-sm">Ingredients</p>
 
-            <div>
-                <div class="flex justify-between items-center border p-2 rounded-md">
+            <div class="space-y-2">
+                <div class="flex justify-between items-center border p-2 rounded-md" v-for="ingredient in pizzaIngredients">
                     <div class="flex items-center space-x-2">
                         <Icon icon="fluent:re-order-dots-vertical-16-regular" class="cursor-pointer" />
-                        <p class="text-sm font-semibold">Mozzarella</p>
+                        <p class="text-sm font-semibold">{{ ingredient.name }}</p>
                     </div>
-                    <p class="text-sm font-medium">1.2$</p>
+                    <p class="text-sm font-medium">{{ ingredient.price }}</p>
                 </div>
             </div>
 
@@ -38,24 +38,35 @@
         heading="Ingredients"
         subheading="Select ingredient from list of ingredients or create a new one"
         @close="ingModalOpened = false"
+        @submit="applyIngredients"
         v-if="ingModalOpened"
     >
         <div class="p-4 space-y-4">
+            <p class="text-sm text-red-500" v-if="showExistError">Ingredient already added in the pizza</p>
+            
             <div class="bg-gray-100 w-full p-2 max-h-52 rounded-md overflow-auto" v-if="ingredients.length != 0">
-                <div class="hover:bg-gray-300 hover:text-white p-1 rounded cursor-pointer" v-for="ingredient in ingredients">
-                    <p>{{ ingredient.name }}</p>
-                    <p>{{ ingredient.price }}</p>
+                <div
+                    class="flex justify-between p-1 rounded cursor-pointer"
+                    :class="{
+                        'bg-black text-white': ingredientsList.includes(ingredient),
+                        'hover:bg-gray-300 hover:text-gray-800': !ingredientsList.includes(ingredient)
+                    }"
+                    v-for="ingredient in ingredients"
+                    @click="ingredientsList.push(ingredient)"
+                >
+                    <p class="text-sm font-medium">{{ ingredient.name }}</p>
+                    <p class="text-sm">{{ ingredient.price }}€</p>
                 </div>
             </div>
 
             <div class="flex space-x-2" v-if="inputFieldShowed">
-                <BaseInput label="Name" class="w-full" />
-                <BaseInput label="Price" class="w-20" />
+                <BaseInput label="Name" :value="ingredientName" class="w-full" @input="ingredientName = $event.target.value" />
+                <BaseInput label="Price" :value="ingredientPrice" class="w-20" @input="ingredientPrice = $event.target.value" />
             </div>
 
             <div class="flex justify-between">
                 <BaseButton color="secondary" size="xs" icon="iconoir:plus" @click="inputFieldShowed = true" v-if="!inputFieldShowed">Add new</BaseButton>
-                <BaseButton color="secondary" size="xs" icon="iconoir:check" @click="inputFieldShowed = true" v-if="inputFieldShowed">Save</BaseButton>
+                <BaseButton color="secondary" size="xs" icon="iconoir:check" @click="saveIngredient" v-if="inputFieldShowed">Save</BaseButton>
                 <BaseButton color="secondary" size="icon" icon="iconoir:cancel" @click="inputFieldShowed = false" v-if="inputFieldShowed" />
             </div>
         </div>
@@ -65,7 +76,7 @@
 <script setup lang="ts">
     import { computed, ref, watchEffect } from 'vue'
     import { Icon } from '@iconify/vue'
-    import { useQuery } from '@/composables/useAPI'
+    import { useQuery, useMutation } from '@/composables/useAPI'
     import { useGlobalStore } from '@/stores/global'
 
     import BaseInput from '@/components/UI/BaseInput.vue'
@@ -75,8 +86,14 @@
 
     const globalStore = useGlobalStore()
 
+    const name = ref('')
+    const pizzaIngredients = ref<any>([])
+    const ingredientsList = ref<any>([])
     const ingModalOpened = ref(false)
     const inputFieldShowed = ref(false)
+    const ingredientName = ref('')
+    const ingredientPrice = ref('')
+    const showExistError = ref(false)
     const apiDoc = ref([
         { reqType: 'POST', url: 'http://localhost:3000/pizzas' },
     ])
@@ -92,4 +109,36 @@
     const ingredients = computed(() => {
         return globalStore.ingredients
     })
+
+    async function saveIngredient() {
+        if (ingredientName.value != '' && ingredientPrice.value != '') {
+            const result = await useMutation('http://localhost:3000/ingredients', 'post', {
+                name: ingredientName.value,
+                price: parseFloat(ingredientPrice.value)
+            })
+
+            globalStore.addIngredient(result.data.ingredients)
+
+            ingredientName.value = ''
+            ingredientPrice.value = ''
+
+            inputFieldShowed.value = false
+        }
+    }
+
+    function applyIngredients() {
+        if (ingredientsList.value.length != 0) {
+            for (const ingredient in ingredientsList.value) {
+                console.log(pizzaIngredients.value.indexOf(ingredientsList.value[ingredient]))
+                if (pizzaIngredients.value.indexOf(ingredientsList.value[ingredient]) == -1) {
+                    pizzaIngredients.value.push(ingredientsList.value[ingredient])
+                } else {
+                    showExistError.value = true
+                    return
+                }
+            }
+            
+            ingModalOpened.value = false
+        }
+    }
 </script>

@@ -15,10 +15,15 @@ export const useGlobalStore = defineStore('global', () => {
         ingredients.value = payload
     }
 
+    function addIngredient(payload: any) {
+        ingredients.value.push(payload)
+    }
+
     return {
         pizzas,
         ingredients,
         setPizzas,
-        setIngredients
+        setIngredients,
+        addIngredient
     }
 })
