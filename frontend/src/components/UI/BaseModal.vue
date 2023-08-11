@@ -11,7 +11,7 @@
             </div>
 			<slot />
 			<div class="dark:bg-darkSemiLight p-2 flex justify-end space-x-1 rounded-b-md">
-                <BaseButton>Submit</BaseButton>
+                <BaseButton @click="$emit('submit')">Submit</BaseButton>
 			</div>
 		</div>
 	</div>
