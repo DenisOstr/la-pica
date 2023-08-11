@@ -20,23 +20,23 @@ export async function useMutation(url: string, type: string, payload: any) {
     let dataName = ref<string>(urlData.pathname.split('/')[1])
 
     if (type == 'post') {
-        data[dataName.value] = await axios.post(url, payload, {
+        data[dataName.value] = (await axios.post(url, payload, {
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        })).data
     }
 
     if (type == 'patch') {
-        data[dataName.value] = await axios.patch(url, payload, {
+        data[dataName.value] = (await axios.patch(url, payload, {
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        })).data
     }
 
     if (type == 'delete') {
-        data[dataName.value] = await axios.delete(url)
+        data[dataName.value] = (await axios.delete(url)).data
     }
 
     return {
