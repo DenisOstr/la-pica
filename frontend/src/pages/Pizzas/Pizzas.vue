@@ -11,7 +11,7 @@
 
         <hr>
 
-        <BaseTable :columns="['Name', 'Price', 'Ingredients']" :data="pizzas" />
+        <BaseTable :columns="['Name', 'Price', 'Ingredients']" :data="pizzas" @openItem="goToPizza($event)" />
         <APIDocs model="Pizza" :endpoints="apiDoc" />
     </div>
 </template>
@@ -46,5 +46,9 @@
 
     function handleCreate() {
         router.push('/pizza/new')
+    }
+
+    function goToPizza(id: string) {
+        router.push(`/pizza/${id}`)
     }
 </script>
