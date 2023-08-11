@@ -5,13 +5,20 @@ import { Pizza } from '@/types/Global'
 
 export const useGlobalStore = defineStore('global', () => {
     const pizzas = ref<Pizza[]>([])
+    const ingredients = ref<any>([])
 
     function setPizzas(payload: any) {
         pizzas.value = payload
     }
 
+    function setIngredients(payload: any) {
+        ingredients.value = payload
+    }
+
     return {
         pizzas,
-        setPizzas
+        ingredients,
+        setPizzas,
+        setIngredients
     }
 })
