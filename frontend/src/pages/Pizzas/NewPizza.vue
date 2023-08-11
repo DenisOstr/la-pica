@@ -6,7 +6,7 @@
                 <p class="text-sm text-gray-500">Create new pizza</p>
             </div>
 
-            <BaseButton @click="() => {}">Save</BaseButton>
+            <BaseButton @click="savePizza">Save</BaseButton>
         </div>
 
         <hr>
@@ -22,7 +22,7 @@
                         <Icon icon="fluent:re-order-dots-vertical-16-regular" class="cursor-pointer" />
                         <p class="text-sm font-semibold">{{ ingredient.name }}</p>
                     </div>
-                    <p class="text-sm font-medium">{{ ingredient.price }}</p>
+                    <p class="text-sm font-medium">{{ ingredient.price }}€</p>
                 </div>
             </div>
 
@@ -42,7 +42,7 @@
         v-if="ingModalOpened"
     >
         <div class="p-4 space-y-4">
-            <p class="text-sm text-red-500" v-if="showExistError">Ingredient already added in the pizza</p>
+            <p class="text-sm text-red-500" v-if="showExistError">Ingredient already added to the pizza</p>
             
             <div class="bg-gray-100 w-full p-2 max-h-52 rounded-md overflow-auto" v-if="ingredients.length != 0">
                 <div
@@ -77,6 +77,7 @@
     import { computed, ref, watchEffect } from 'vue'
     import { Icon } from '@iconify/vue'
     import { useQuery, useMutation } from '@/composables/useAPI'
+    import { useRouter } from 'vue-router'
     import { useGlobalStore } from '@/stores/global'
 
     import BaseInput from '@/components/UI/BaseInput.vue'
@@ -84,6 +85,7 @@
     import BaseModal from '@/components/UI/BaseModal.vue'
     import APIDocs from '@/components/APIDocs.vue'
 
+    const router = useRouter()
     const globalStore = useGlobalStore()
 
     const name = ref('')
@@ -129,7 +131,6 @@
     function applyIngredients() {
         if (ingredientsList.value.length != 0) {
             for (const ingredient in ingredientsList.value) {
-                console.log(pizzaIngredients.value.indexOf(ingredientsList.value[ingredient]))
                 if (pizzaIngredients.value.indexOf(ingredientsList.value[ingredient]) == -1) {
                     pizzaIngredients.value.push(ingredientsList.value[ingredient])
                 } else {
@@ -139,6 +140,22 @@
             }
             
             ingModalOpened.value = false
+        }
+    }
+
+    async function savePizza() {
+        if (name.value != '' && pizzaIngredients.value.length != 0) {
+            const result = await useMutation('http://localhost:3000/pizzas', 'post', {
+                name: name.value,
+                ingredients: pizzaIngredients.value
+            })
+
+            globalStore.addPizza(result.data.pizzas)
+
+            name.value = ''
+            pizzaIngredients.value = []
+            
+            router.push('/pizzas')
         }
     }
 </script>

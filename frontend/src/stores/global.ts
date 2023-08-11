@@ -11,6 +11,10 @@ export const useGlobalStore = defineStore('global', () => {
         pizzas.value = payload
     }
 
+    function addPizza(payload: any) {
+        pizzas.value.push(payload)
+    }
+
     function setIngredients(payload: any) {
         ingredients.value = payload
     }
@@ -23,6 +27,7 @@ export const useGlobalStore = defineStore('global', () => {
         pizzas,
         ingredients,
         setPizzas,
+        addPizza,
         setIngredients,
         addIngredient
     }
