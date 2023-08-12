@@ -7,6 +7,7 @@ const PizzasPage = () => import('@/pages/Pizzas/Pizzas.vue')
 const PizzaPage = () => import('@/pages/Pizzas/[id].vue')
 const NewPizzaPage = () => import('@/pages/Pizzas/NewPizza.vue')
 const IngredientsPage = () => import('@/pages/Ingredients/Ingredients.vue')
+const NewIngredientPage = () => import('@/pages/Ingredients/NewIngredient.vue')
 const IngredientPage = () => import('@/pages/Ingredients/[id].vue')
 
 const routes: Array<RouteRecordRaw> = [
@@ -46,6 +47,14 @@ const routes: Array<RouteRecordRaw> = [
         path: '/ingredients',
         name: 'ingredients',
         component: IngredientsPage,
+        meta: {
+            layout: inner
+        }
+    },
+    {
+        path: '/ingredient/new',
+        name: 'new ingredient',
+        component: NewIngredientPage,
         meta: {
             layout: inner
         }
