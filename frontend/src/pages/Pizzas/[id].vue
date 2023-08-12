@@ -196,6 +196,7 @@
     async function deletePizza() {
         await useMutation(`http://localhost:3000/pizzas/${pizzaId.value}`, 'delete', null)
 
+        globalStore.handleToast('The Pizza was successfully deleted!')
         router.push('/pizzas')
     }
 
@@ -206,6 +207,7 @@
                 ingredients: ingredients.value
             })
 
+            globalStore.handleToast('The Pizza was successfully updated!')
             router.push('/pizzas')
         }
     }

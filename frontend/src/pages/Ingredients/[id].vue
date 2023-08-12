@@ -29,12 +29,14 @@
     import { ref, onMounted } from 'vue'
     import { useRouter } from 'vue-router'
     import { useQuery, useMutation } from '@/composables/useAPI'
+    import { useGlobalStore } from '@/stores/global'
 
     import BaseButton from '@/components/UI/BaseButton.vue'
     import BaseInput from '@/components/UI/BaseInput.vue'
     import APIDocs from '@/components/APIDocs.vue'
 
     const router = useRouter()
+    const globalStore = useGlobalStore()
 
     const ingredientId = ref(router.currentRoute.value.params.id)
     const ingredient = ref<any>()
@@ -60,6 +62,7 @@
     async function deleteIngredient() {
         await useMutation(`http://localhost:3000/ingredients/${ingredientId.value}`, 'delete', null)
 
+        globalStore.handleToast('The Ingredient was successfully deleted!')
         router.push('/ingredients')
     }
 
@@ -70,6 +73,7 @@
                 price: parseFloat(price.value)
             })
 
+            globalStore.handleToast('The Ingredient was successfully updated!')
             router.push('/ingredients')
         }
     }

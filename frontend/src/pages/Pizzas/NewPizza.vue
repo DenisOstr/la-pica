@@ -183,6 +183,7 @@
             name.value = ''
             pizzaIngredients.value = []
             
+            globalStore.handleToast('The Pizza was successfully created!')
             router.push('/pizzas')
         }
     }

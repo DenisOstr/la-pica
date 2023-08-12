@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
     import { Icon } from '@iconify/vue'
+    import { useGlobalStore } from '@/stores/global'
 
     import BaseButton from './UI/BaseButton.vue'
 
@@ -33,7 +34,11 @@
         endpoints: any
     }>()
 
+    const globalStore = useGlobalStore()
+
     function copyUrl(url: string) {
         navigator.clipboard.writeText(url)
+
+        globalStore.handleToast('Copied successfully!')
     }
 </script>

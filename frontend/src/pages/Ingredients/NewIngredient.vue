@@ -53,6 +53,7 @@
             name.value = ''
             price.value = ''
 
+            globalStore.handleToast('The Ingredient was successfully created!')
             router.push('/ingredients')
         }
     }
