@@ -4,6 +4,8 @@ import { ref } from "vue"
 import { Pizza } from '@/types/Global'
 
 export const useGlobalStore = defineStore('global', () => {
+    const toastShowed = ref(false)
+    const toastMessage = ref('')
     const pizzas = ref<Pizza[]>([])
     const ingredients = ref<any>([])
 
@@ -23,12 +25,26 @@ export const useGlobalStore = defineStore('global', () => {
         ingredients.value.push(payload)
     }
 
+    function handleToast(message: string) {
+        toastShowed.value = true
+        toastMessage.value = message
+    }
+
+    function closeToast() {
+        toastShowed.value = false
+        toastMessage.value = ''
+    }
+
     return {
+        toastShowed,
+        toastMessage,
         pizzas,
         ingredients,
         setPizzas,
         addPizza,
         setIngredients,
-        addIngredient
+        addIngredient,
+        handleToast,
+        closeToast
     }
 })
