@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-xl font-semibold">Ingredients ({{ ingredients.length }})</h1>
-                <p class="text-sm text-gray-500">Manage pizzas</p>
+                <p class="text-sm text-gray-500">Manage ingredients</p>
             </div>
 
             <BaseButton icon="iconoir:plus" @click="handleCreate">Create ingredient</BaseButton>
@@ -21,6 +21,7 @@
     import { useQuery } from '@/composables/useAPI'
     import { useGlobalStore } from '@/stores/global'
     import { useRouter } from 'vue-router'
+    import { APIDoc } from '@/types/Global'
 
     import BaseButton from '@/components/UI/BaseButton.vue'
     import BaseTable from '@/components/UI/BaseTable.vue'
@@ -29,7 +30,7 @@
     const router = useRouter()
     const globalStore = useGlobalStore()
 
-    const apiDoc = ref([
+    const apiDoc = ref<APIDoc[]>([
         { reqType: 'GET', url: 'http://localhost:3000/ingredients' },
         { reqType: 'DELETE', url: 'http://localhost:3000/ingredients/{id}' },
     ])

@@ -27,6 +27,7 @@
     import { useMutation } from '@/composables/useAPI'
     import { useRouter } from 'vue-router'
     import { useGlobalStore } from '@/stores/global'
+    import { APIDoc } from '@/types/Global'
 
     import BaseInput from '@/components/UI/BaseInput.vue'
     import BaseButton from '@/components/UI/BaseButton.vue'
@@ -37,7 +38,7 @@
 
     const name = ref('')
     const price = ref('')
-    const apiDoc = ref([
+    const apiDoc = ref<APIDoc[]>([
         { reqType: 'POST', url: 'http://localhost:3000/ingredients' },
     ])
 

@@ -30,6 +30,7 @@
     import { useRouter } from 'vue-router'
     import { useQuery, useMutation } from '@/composables/useAPI'
     import { useGlobalStore } from '@/stores/global'
+    import { APIDoc, Ingredient } from '@/types/Global'
 
     import BaseButton from '@/components/UI/BaseButton.vue'
     import BaseInput from '@/components/UI/BaseInput.vue'
@@ -39,10 +40,10 @@
     const globalStore = useGlobalStore()
 
     const ingredientId = ref(router.currentRoute.value.params.id)
-    const ingredient = ref<any>()
+    const ingredient = ref<Ingredient>()
     const name = ref('')
-    const price = ref('')
-    const apiDoc = ref([
+    const price = ref<any>('')
+    const apiDoc = ref<APIDoc[]>([
         { reqType: 'GET', url: 'http://localhost:3000/pizzas/{id}' },
         { reqType: 'PATCH', url: 'http://localhost:3000/pizzas/{id}' },
         { reqType: 'DELETE', url: 'http://localhost:3000/pizzas/{id}' },
@@ -54,8 +55,8 @@
         result.then((res) => {
             ingredient.value = res.data.ingredients
 
-            name.value = ingredient.value.name
-            price.value = ingredient.value.price
+            name.value = ingredient.value!.name
+            price.value = ingredient.value!.price
         })
     })
 

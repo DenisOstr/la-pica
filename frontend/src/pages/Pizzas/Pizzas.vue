@@ -21,6 +21,7 @@
     import { useQuery } from '@/composables/useAPI'
     import { useGlobalStore } from '@/stores/global'
     import { useRouter } from 'vue-router'
+    import { APIDoc } from '@/types/Global'
 
     import BaseButton from '@/components/UI/BaseButton.vue'
     import BaseTable from '@/components/UI/BaseTable.vue'
@@ -29,7 +30,7 @@
     const router = useRouter()
     const globalStore = useGlobalStore()
 
-    const apiDoc = ref([
+    const apiDoc = ref<APIDoc[]>([
         { reqType: 'GET', url: 'http://localhost:3000/pizzas' },
         { reqType: 'DELETE', url: 'http://localhost:3000/pizzas/{id}' },
     ])

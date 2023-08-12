@@ -86,6 +86,7 @@
     import { useRouter } from 'vue-router'
     import { useQuery, useMutation } from '@/composables/useAPI'
     import { useGlobalStore } from '@/stores/global'
+    import { APIDoc, Ingredient } from '@/types/Global'
 
     import BaseButton from '@/components/UI/BaseButton.vue'
     import BaseInput from '@/components/UI/BaseInput.vue'
@@ -100,12 +101,12 @@
     const name = ref('')
     const ingredients = ref<any>({})
     const ingModalOpened = ref(false)
-    const ingredientsList = ref<any>([])
+    const ingredientsList = ref<Ingredient[]>([])
     const inputFieldShowed = ref(false)
     const ingredientName = ref('')
     const ingredientPrice = ref('')
     const showExistError = ref(false)
-    const apiDoc = ref([
+    const apiDoc = ref<APIDoc[]>([
         { reqType: 'GET', url: 'http://localhost:3000/pizzas/{id}' },
         { reqType: 'PATCH', url: 'http://localhost:3000/pizzas/{id}' },
         { reqType: 'DELETE', url: 'http://localhost:3000/pizzas/{id}' },
@@ -150,13 +151,13 @@
         }
     }
 
-    function addIngredientToList(item: any) {
-        const ingredientExist = ingredientsList.value.some((ingredient: any) => {
+    function addIngredientToList(item: Ingredient) {
+        const ingredientExist = ingredientsList.value.some((ingredient: Ingredient) => {
             return ingredient.name === item.name
         })
 
         if (ingredientExist) {
-            const ingredientItem = ingredientsList.value.findIndex((ingredient: any) => {
+            const ingredientItem = ingredientsList.value.findIndex((ingredient: Ingredient) => {
                 return ingredient.name == item.name
             })
 
@@ -169,7 +170,7 @@
     function applyIngredients() {
         if (ingredientsList.value.length != 0) {
             for (const ingredientItem in ingredientsList.value) {
-                const ingredientExist = ingredients.value.some((ingredient: any) => {
+                const ingredientExist = ingredients.value.some((ingredient: Ingredient) => {
                     return ingredient.name === ingredientsList.value[ingredientItem].name
                 })
 
@@ -185,8 +186,8 @@
         }
     }
 
-    function deleteIngredient(ingredient: any) {
-        const ingredientItem = ingredients.value.findIndex((item: any) => {
+    function deleteIngredient(ingredient: Ingredient) {
+        const ingredientItem = ingredients.value.findIndex((item: Ingredient) => {
             return item.name == ingredient.name
         })
 

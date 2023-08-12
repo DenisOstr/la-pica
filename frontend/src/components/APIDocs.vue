@@ -26,12 +26,13 @@
 <script setup lang="ts">
     import { Icon } from '@iconify/vue'
     import { useGlobalStore } from '@/stores/global'
+    import { APIDoc } from '@/types/Global'
 
     import BaseButton from './UI/BaseButton.vue'
 
     defineProps<{
         model: string
-        endpoints: any
+        endpoints: APIDoc[]
     }>()
 
     const globalStore = useGlobalStore()

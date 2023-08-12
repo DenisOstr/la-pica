@@ -19,8 +19,9 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
+    import { Navigation } from '@/types/Global'
 
-    const navigations = ref([
+    const navigations = ref<Navigation[]>([
         { slug: 'overview', name: 'Overview', url: '/' },
         { slug: 'pizzas', name: 'Pizzas', url: '/pizzas' },
         { slug: 'ingredients', name: 'Ingredients', url: '/ingredients' },

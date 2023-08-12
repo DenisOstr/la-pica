@@ -1,27 +1,27 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 
-import { Pizza } from '@/types/Global'
+import { Ingredient, Pizza } from '@/types/Global'
 
 export const useGlobalStore = defineStore('global', () => {
     const toastShowed = ref(false)
     const toastMessage = ref('')
     const pizzas = ref<Pizza[]>([])
-    const ingredients = ref<any>([])
+    const ingredients = ref<Ingredient[]>([])
 
-    function setPizzas(payload: any) {
+    function setPizzas(payload: Pizza[]) {
         pizzas.value = payload
     }
 
-    function addPizza(payload: any) {
+    function addPizza(payload: Pizza) {
         pizzas.value.push(payload)
     }
 
-    function setIngredients(payload: any) {
+    function setIngredients(payload: Ingredient[]) {
         ingredients.value = payload
     }
 
-    function addIngredient(payload: any) {
+    function addIngredient(payload: Ingredient) {
         ingredients.value.push(payload)
     }
 
