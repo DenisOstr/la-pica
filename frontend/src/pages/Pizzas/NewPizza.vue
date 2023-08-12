@@ -22,7 +22,11 @@
                         <Icon icon="fluent:re-order-dots-vertical-16-regular" class="cursor-pointer" />
                         <p class="text-sm font-semibold">{{ ingredient.name }}</p>
                     </div>
-                    <p class="text-sm font-medium">{{ ingredient.price }}€</p>
+                    
+                    <div class="flex items-center space-x-2">
+                        <p class="text-sm font-medium">{{ ingredient.price.toFixed(2) }}€</p>
+                        <Icon icon="iconoir:cancel" class="hover:text-red-500 cursor-pointer" @click="deleteIngredient(ingredient)" />
+                    </div>
                 </div>
             </div>
 
@@ -44,7 +48,7 @@
         <div class="p-4 space-y-4">
             <p class="text-sm text-red-500" v-if="showExistError">Ingredient already added to the pizza</p>
             
-            <div class="bg-gray-100 w-full p-2 max-h-52 rounded-md overflow-auto" v-if="ingredients.length != 0">
+            <div class="bg-gray-100 w-full p-2 max-h-52 rounded-md overflow-auto space-y-1" v-if="ingredients.length != 0">
                 <div
                     class="flex justify-between p-1 rounded cursor-pointer"
                     :class="{
@@ -52,10 +56,10 @@
                         'hover:bg-gray-300 hover:text-gray-800': !ingredientsList.includes(ingredient)
                     }"
                     v-for="ingredient in ingredients"
-                    @click="ingredientsList.push(ingredient)"
+                    @click="addIngredientToList(ingredient)"
                 >
                     <p class="text-sm font-medium">{{ ingredient.name }}</p>
-                    <p class="text-sm">{{ ingredient.price }}€</p>
+                    <p class="text-sm">{{ ingredient.price.toFixed(2) }}€</p>
                 </div>
             </div>
 
@@ -128,6 +132,22 @@
         }
     }
 
+    function addIngredientToList(item: any) {
+        const ingredientExist = ingredientsList.value.some((ingredient: any) => {
+            return ingredient.name === item.name
+        })
+
+        if (ingredientExist) {
+            const ingredientItem = ingredientsList.value.findIndex((ingredient: any) => {
+                return ingredient.name == item.name
+            })
+
+            ingredientsList.value.splice(ingredientItem, 1)
+        } else {
+            ingredientsList.value.push(item)
+        }
+    }
+
     function applyIngredients() {
         if (ingredientsList.value.length != 0) {
             for (const ingredient in ingredientsList.value) {
@@ -141,6 +161,14 @@
             
             ingModalOpened.value = false
         }
+    }
+
+    function deleteIngredient(ingredient: any) {
+        const ingredientItem = pizzaIngredients.value.findIndex((item: any) => {
+            return item.name == ingredient.name
+        })
+
+        pizzaIngredients.value.splice(ingredientItem, 1)
     }
 
     async function savePizza() {
