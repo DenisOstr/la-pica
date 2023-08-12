@@ -16,19 +16,27 @@
         <div class="space-y-2">
             <p class="text-sm">Ingredients</p>
 
-            <div class="space-y-2">
-                <div class="flex justify-between items-center border p-2 rounded-md" v-for="ingredient in pizzaIngredients">
-                    <div class="flex items-center space-x-2">
-                        <Icon icon="fluent:re-order-dots-vertical-16-regular" class="cursor-pointer" />
-                        <p class="text-sm font-semibold">{{ ingredient.name }}</p>
+            <draggable
+                v-model="pizzaIngredients"
+                item-key="id"
+                handle=".drag-handle"
+                :animation="200"
+                class="space-y-2"
+            >
+                <template #item="{ element }">
+                    <div class="flex justify-between items-center border p-2 rounded-md">
+                        <div class="flex items-center space-x-2">
+                            <Icon icon="fluent:re-order-dots-vertical-16-regular" class="drag-handle cursor-pointer" />
+                            <p class="text-sm font-semibold">{{ element.name }}</p>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <p class="text-sm font-medium">{{ element.price.toFixed(2) }}€</p>
+                            <Icon icon="iconoir:cancel" class="hover:text-red-500 cursor-pointer" @click="deleteIngredient(element)" />
+                        </div>
                     </div>
-                    
-                    <div class="flex items-center space-x-2">
-                        <p class="text-sm font-medium">{{ ingredient.price.toFixed(2) }}€</p>
-                        <Icon icon="iconoir:cancel" class="hover:text-red-500 cursor-pointer" @click="deleteIngredient(ingredient)" />
-                    </div>
-                </div>
-            </div>
+                </template>
+            </draggable>
 
             <BaseButton color="secondary" size="xs" icon="iconoir:plus" @click="ingModalOpened = !ingModalOpened">Add ingredient</BaseButton>
         </div>
@@ -80,6 +88,7 @@
 <script setup lang="ts">
     import { computed, ref, watchEffect } from 'vue'
     import { Icon } from '@iconify/vue'
+    import draggable from 'vuedraggable'
     import { useQuery, useMutation } from '@/composables/useAPI'
     import { useRouter } from 'vue-router'
     import { useGlobalStore } from '@/stores/global'
