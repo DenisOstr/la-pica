@@ -17,7 +17,7 @@
             <div class="flex items-center justify-between">
                 <p class="bg-gray-200 w-fit px-2 py-1 text-xs font-medium rounded">{{ endpoint.url }}</p>
 
-                <BaseButton color="secondary" size="icon" icon="iconoir:copy" />
+                <BaseButton color="secondary" size="icon" icon="iconoir:copy" @click="copyUrl(endpoint.url)" />
             </div>
         </div>
     </div>
@@ -32,4 +32,8 @@
         model: string
         endpoints: any
     }>()
+
+    function copyUrl(url: string) {
+        navigator.clipboard.writeText(url)
+    }
 </script>

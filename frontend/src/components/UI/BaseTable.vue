@@ -20,13 +20,13 @@
 
                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                            <h4 class="text-gray-700">{{ item.price }}€</h4>
+                            <h4 class="text-gray-700">{{ item.price.toFixed(2) }}€</h4>
                         </div>
                     </td>
 
-                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <td class="px-4 py-4 text-sm whitespace-nowrap" v-if="item.hasOwnProperty('ingredients')">
                         <div class="flex space-x-2">
-                            <h4 class="text-gray-700" v-for="ingredient in JSON.parse(item.ingredients)">{{ ingredient.name }}</h4>
+                            <h4 class="bg-gray-200 px-1 text-gray-700 text-xs rounded" v-for="ingredient in JSON.parse(item.ingredients)">{{ ingredient.name }}</h4>
                         </div>
                     </td>
 
